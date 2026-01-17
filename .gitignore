@@ -7,10 +7,10 @@
 [Ll]ogs/
 [Uu]ser[Ss]ettings/
 
-# Package cache (important!)
+# Package cache
 [Ll]ibrary/PackageCache/
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
