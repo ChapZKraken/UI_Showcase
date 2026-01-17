@@ -6,11 +6,10 @@ public class HealthController : MonoBehaviour
     [SerializeField] private HealthModel model;
 
     [SerializeField] private DamageNumberController damageNumberPrefab;
-    [SerializeField] private ParticleSystem healParticles;
 
     private int currentHealth;
 
-    public void Start()
+    private void Start()
     {
         currentHealth = model.MaxHealth;
 
@@ -33,8 +32,6 @@ public class HealthController : MonoBehaviour
         UpdateHealth(amount);
 
         view.Blink(Color.green);
-
-        healParticles.Play(true);
     }
 
     private void UpdateHealth(int amount)

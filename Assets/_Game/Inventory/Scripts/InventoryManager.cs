@@ -8,10 +8,6 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private SlotController slotPrefab;
     [SerializeField] private Transform slotsHolder;
 
-    [Header("ITESM")]
-    [SerializeField] private ItemController itemPrefab;
-    [SerializeField] private ItemModel[] itemsModels;
-
     private void Start()
     {
         InitializeSlots();
