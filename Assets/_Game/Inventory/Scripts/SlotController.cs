@@ -1,6 +1,4 @@
-
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class SlotController : MonoBehaviour
 {
@@ -22,8 +20,6 @@ public class SlotController : MonoBehaviour
         item.SetPosition(transform.position);
 
         currentItem = item;
-
-        view.SetItemImage(currentItem.GetModel().ItemSprite);
     }
 
     private void RemoveFromSlot()
@@ -31,7 +27,6 @@ public class SlotController : MonoBehaviour
         currentItem.OnStartDrag -= RemoveFromSlot;
 
         currentItem = null;
-        view.SetItemImage(null);
     }
 
     private bool IsEmpty()

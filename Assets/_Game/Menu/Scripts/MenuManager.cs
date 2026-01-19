@@ -11,6 +11,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private CanvasGroup menuCanvasGroup;
     [SerializeField] private CanvasGroup settingsCanvasGroup;
 
+    [SerializeField] private LoadingManager loadingPrefab;
+
     public enum Screen { Menu, Settings };
     private Screen currentScreen;
 
@@ -66,7 +68,8 @@ public class MenuManager : MonoBehaviour
 
     private void LoadGame()
     {
-        SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+        LoadingManager loadingManager = Instantiate(loadingPrefab);
+        loadingManager.Initialize("Main", LoadSceneMode.Single);
     }
 
     private void Quit()

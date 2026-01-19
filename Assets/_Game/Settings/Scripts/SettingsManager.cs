@@ -30,11 +30,13 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] private SliderUI brightnessSlider;
 
     [Header("AUDIO")]
-    [SerializeField] private TMP_Dropdown localizationDropdown;
     [SerializeField] private SliderUI masterVolumeSlider;
     [SerializeField] private SliderUI ambienceVolumeSlider;
     [SerializeField] private SliderUI sfxVolumeSlider;
     [SerializeField] private SliderUI dialogueVolumeSlider;
+
+    private const int DropdownItemHeight = 50;
+    private const int MaxDropdownHeight = 250;
 
     public static Action<SettingsTab> OnChangeTab;
 
@@ -88,6 +90,7 @@ public class SettingsManager : MonoBehaviour
         }
 
         resolutionDropdown.AddOptions(resolutionNames);
+        resolutionDropdown.template.sizeDelta = new Vector2(resolutionDropdown.template.sizeDelta.x, Mathf.Min(MaxDropdownHeight, DropdownItemHeight * resolutionNames.Count));
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
     }
@@ -105,14 +108,15 @@ public class SettingsManager : MonoBehaviour
         qualityDropdown.ClearOptions();
 
         qualityDropdown.AddOptions(options);
-        qualityDropdown.value = GameSettings.Instance.Quality;
+        qualityDropdown.template.sizeDelta = new Vector2(qualityDropdown.template.sizeDelta.x, Mathf.Min(MaxDropdownHeight, DropdownItemHeight * options.Count));
+        qualityDropdown.value = GameSettingsManager.Instance.GetQuality();
         qualityDropdown.RefreshShownValue();
     }
 
     public void SetQuality(int index)
     {
         QualitySettings.SetQualityLevel(index);
-        GameSettings.Instance.SetQuality(index);
+        GameSettingsManager.Instance.SetQuality(index);
     }
 
     private void PopulateSprintMode()
@@ -122,8 +126,8 @@ public class SettingsManager : MonoBehaviour
         sprintModeDropdown.ClearOptions();
 
         sprintModeDropdown.AddOptions(options);
-        sprintModeDropdown.template.sizeDelta = new Vector2(sprintModeDropdown.template.sizeDelta.x, 50 * sprintModeDropdown.options.Count);
-        sprintModeDropdown.value = (int)GameSettings.Instance.SprintMode;
+        sprintModeDropdown.template.sizeDelta = new Vector2(sprintModeDropdown.template.sizeDelta.x, Mathf.Min(MaxDropdownHeight, DropdownItemHeight * options.Count));
+        sprintModeDropdown.value = (int)GameSettingsManager.Instance.GetSprintMode();
         sprintModeDropdown.RefreshShownValue();
     }
 
@@ -134,7 +138,8 @@ public class SettingsManager : MonoBehaviour
         crouchModeDropdown.ClearOptions();
 
         crouchModeDropdown.AddOptions(options);
-        crouchModeDropdown.value = (int)GameSettings.Instance.CrouchMode;
+        crouchModeDropdown.template.sizeDelta = new Vector2(crouchModeDropdown.template.sizeDelta.x, Mathf.Min(MaxDropdownHeight, DropdownItemHeight * options.Count));
+        crouchModeDropdown.value = (int)GameSettingsManager.Instance.GetCrouchMode();
         crouchModeDropdown.RefreshShownValue();
     }
 
@@ -156,24 +161,24 @@ public class SettingsManager : MonoBehaviour
 
     private void SetSettingsSliders()
     {
-        mouseSensitivitySlider.SetValue(GameSettings.Instance.MouseSensitivity);
-        headBobToggle.isOn = GameSettings.Instance.HeadBobEnabled;
-        invertYAxisToggle.isOn = GameSettings.Instance.InvertYAxis;
-        showCenterDotToggle.isOn = GameSettings.Instance.ShowCenterDot;
-        sprintModeDropdown.value = (int)GameSettings.Instance.SprintMode;
-        crouchModeDropdown.value = (int)GameSettings.Instance.CrouchMode;
-        brightnessSlider.SetValue(GameSettings.Instance.Brightness);
+        mouseSensitivitySlider.SetValue(GameSettingsManager.Instance.GetMouseSensitivity());
+        headBobToggle.isOn = GameSettingsManager.Instance.GetHeadBobEnabled();
+        invertYAxisToggle.isOn = GameSettingsManager.Instance.GetInvertYAxis();
+        showCenterDotToggle.isOn = GameSettingsManager.Instance.GetShowCenterDot();
+        sprintModeDropdown.value = (int)GameSettingsManager.Instance.GetSprintMode();
+        crouchModeDropdown.value = (int)GameSettingsManager.Instance.GetCrouchMode();
+        brightnessSlider.SetValue(GameSettingsManager.Instance.GetBrightness());
     }
 
     private void SetSettingsSlidersListeners()
     {
-        mouseSensitivitySlider.AddListener(GameSettings.Instance.SetMouseSensitivity);
-        headBobToggle.onValueChanged.AddListener(GameSettings.Instance.SetHeadBobEnabled);
-        invertYAxisToggle.onValueChanged.AddListener(GameSettings.Instance.SetInvertYAxis);
-        showCenterDotToggle.onValueChanged.AddListener(GameSettings.Instance.SetShowCenterDot);
-        sprintModeDropdown.onValueChanged.AddListener((int value) => GameSettings.Instance.SetSprintMode((GameSettings.Mode)value));
-        crouchModeDropdown.onValueChanged.AddListener((int value) => GameSettings.Instance.SetCrouchMode((GameSettings.Mode)value));
-        brightnessSlider.AddListener(GameSettings.Instance.SetBrightness);
+        mouseSensitivitySlider.AddListener(GameSettingsManager.Instance.SetMouseSensitivity);
+        headBobToggle.onValueChanged.AddListener(GameSettingsManager.Instance.SetHeadBobEnabled);
+        invertYAxisToggle.onValueChanged.AddListener(GameSettingsManager.Instance.SetInvertYAxis);
+        showCenterDotToggle.onValueChanged.AddListener(GameSettingsManager.Instance.SetShowCenterDot);
+        sprintModeDropdown.onValueChanged.AddListener((int value) => GameSettingsManager.Instance.SetSprintMode((Mode)value));
+        crouchModeDropdown.onValueChanged.AddListener((int value) => GameSettingsManager.Instance.SetCrouchMode((Mode)value));
+        brightnessSlider.AddListener(GameSettingsManager.Instance.SetBrightness);
     }
 
     private void BackButtonClicked()
@@ -183,13 +188,13 @@ public class SettingsManager : MonoBehaviour
 
     private void ResetSettings()
     {
-        GameSettings.Instance.SetMouseSensitivity(1.5f);
-        GameSettings.Instance.SetHeadBobEnabled(true);
-        GameSettings.Instance.SetInvertYAxis(false);
-        GameSettings.Instance.SetShowCenterDot(true);
-        GameSettings.Instance.SetSprintMode(GameSettings.Mode.Hold);
-        GameSettings.Instance.SetCrouchMode(GameSettings.Mode.Hold);
-        GameSettings.Instance.SetBrightness(1f);
+        GameSettingsManager.Instance.SetMouseSensitivity(1.5f);
+        GameSettingsManager.Instance.SetHeadBobEnabled(true);
+        GameSettingsManager.Instance.SetInvertYAxis(false);
+        GameSettingsManager.Instance.SetShowCenterDot(true);
+        GameSettingsManager.Instance.SetSprintMode(Mode.Hold);
+        GameSettingsManager.Instance.SetCrouchMode(Mode.Hold);
+        GameSettingsManager.Instance.SetBrightness(1f);
 
         SetAudioSliders();
         SetSettingsSliders();
