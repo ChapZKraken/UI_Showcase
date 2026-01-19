@@ -6,10 +6,12 @@ using UnityEngine.UI;
 
 public class ItemView : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
+    [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Image itemImage;
 
-    private Vector3 initialPosition;
+    [SerializeField] private Vector3 initialPosition;
     private Vector3 initialScale;
+    private Transform initialParent;
 
     private Tween moveTween;
     private Tween scaleTween;
@@ -18,7 +20,8 @@ public class ItemView : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     private void Awake()
     {
-        initialPosition = transform.position;
+        initialParent = transform.parent;
+        initialPosition = rectTransform.anchoredPosition;
         initialScale = transform.localScale;
     }
 
@@ -29,10 +32,8 @@ public class ItemView : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void SetPosition(Vector3 position)
     {
-        initialPosition = position;
-
         moveTween.Kill();
-        moveTween = transform.DOMove(position, 0.2f).SetEase(Ease.OutQuad);
+        moveTween = rectTransform.DOAnchorPos(position, 0.2f).SetEase(Ease.OutQuad);
     }
 
     public void SetScale(bool up)
@@ -45,6 +46,7 @@ public class ItemView : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         itemImage.raycastTarget = false;
 
+        transform.SetParent(initialParent);
         transform.position = Input.mousePosition;
 
         OnStartDrag?.Invoke();

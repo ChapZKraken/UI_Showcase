@@ -17,7 +17,8 @@ public class SlotController : MonoBehaviour
             return;
 
         item.OnStartDrag += RemoveFromSlot;
-        item.SetPosition(transform.position);
+        item.transform.SetParent(transform);
+        item.SetPosition(Vector3.zero);
 
         currentItem = item;
     }

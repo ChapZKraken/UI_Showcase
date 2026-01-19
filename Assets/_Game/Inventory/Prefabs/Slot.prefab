@@ -72,6 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1531c4b3698003429535438682fb74b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlotView
+  rectTransform: {fileID: 2322091070862173894}
 --- !u!1 &6946220098908865847
 GameObject:
   m_ObjectHideFlags: 0

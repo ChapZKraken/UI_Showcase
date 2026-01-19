@@ -64,7 +64,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1c4f793eadc90748a5a4ce13914d7d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemView
+  rectTransform: {fileID: 7509740048941575172}
   itemImage: {fileID: 4233208994212712052}
+  initialPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &6114603009206609709
 GameObject:
   m_ObjectHideFlags: 0
